@@ -3,6 +3,11 @@ import Nav from '@/components/Nav';
 import {useState} from "react";
 import Logo from "@/components/logo";
 
+export const metadata = {
+    title: "Next.js Authentication",
+    description: "Secure Authentication using Next.js and NextAuth",
+};
+
 export default function Layout ({children}) {
     const [showNav,setShowNav] = useState(false);
     const { data: session } = useSession();
@@ -19,7 +24,7 @@ export default function Layout ({children}) {
     }
     return (
         <div className="bg-bgGray min-h-screen">
-            <div className="block md:hidden flex items-center p-4">
+            <div className="block md:hidden items-center p-4">
                 <button onClick={() => setShowNav(true)}>
                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="size-6">
                         <path fillRule="evenodd"
