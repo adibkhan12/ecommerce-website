@@ -7,7 +7,13 @@ module.exports = {
       "./styles/**/*.{css,less,sass,scss,scssx}",
   ],
   theme: {
-    extend: {},
+    extend: {
+      colors: {
+        primary: '#5542F6',
+        highlight: '#eae8fb',
+        bgGray: '#fbfafd',
+      }
+    },
   },
   variants: {
     extend: {
