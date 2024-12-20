@@ -3,6 +3,7 @@ import {useRouter} from "next/router";
 import axios from "axios";
 import Spinner from "@/components/Spinner";
 import {ReactSortable} from "react-sortablejs";
+import Image from "next/image";
 
 export default function ProductForm ({
      _id,
@@ -98,20 +99,20 @@ export default function ProductForm ({
                     onChange={ev => setCategory(ev.target.value)}>
                     <option value= "" >Uncategorized</option>
                     {categories.length > 0 && categories.map(c=> (
-                        <option value={c._id}>{c.name}</option>
+                        <option key={c._id} value={c._id}>{c.name}</option>
                     ))}
                 </select>
                 {propertiesToFill.length > 0 && propertiesToFill.map(p =>(
-                    <div className="">
+                    <div>
                         <label>{p.name[0].toUpperCase()+p.name.substring(1)}</label>
-                        <div>
+                        <div key={p.name}>
                             <select
                                 value={productProperties[p.name]}
                                 onChange={ev =>
                                     setProductProp(p.name, ev.target.value)
                                 }>
                                 {p.values.map(v => (
-                                    <option value={v}>{v}</option>
+                                    <option key={v} value={v}>{v}</option>
                                 ))}
                             </select>
                         </div>
@@ -125,9 +126,15 @@ export default function ProductForm ({
                         list={images}
                         className="flex flex-wrap gap-1"
                         setList={updateImagesOrder}>
-                    {!!images?.length && images.map(link =>(
-                            <div key={link} className="h-24 bg-white p-3 shadow-sm rounded-sm border border-gray-200">
-                                <img src={link} alt="" className="rounded-sm"/>
+                    {!!images?.length &&
+                        images.map(link =>(
+                            <div
+                                key={link}
+                                className="h-24 bg-white p-3 shadow-sm rounded-sm border border-gray-200">
+                                <img
+                                    src={link}
+                                    alt=""
+                                    className="rounded-sm"/>
                             </div>
                         ))}
                     </ReactSortable>
