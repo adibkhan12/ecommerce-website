@@ -103,7 +103,7 @@ export default function ProductForm ({
                     ))}
                 </select>
                 {propertiesToFill.length > 0 && propertiesToFill.map(p =>(
-                    <div>
+                    <div key={p.name}>
                         <label>{p.name[0].toUpperCase()+p.name.substring(1)}</label>
                         <div key={p.name}>
                             <select
