@@ -9,7 +9,7 @@ export default function RootLayout({
                                    }: Readonly<{ children: React.ReactNode }>) {
     return (
         <>
-            {/* Set metadata dynamically using Head */}
+            {/* Use Head for metadata */}
             <Head>
                 <title>Nextjs Authentication</title>
                 <meta name="description" content="Nextjs Authentication" />
