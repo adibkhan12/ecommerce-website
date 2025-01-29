@@ -1,6 +1,6 @@
 import { Poppins } from "next/font/google";
 import Head from "next/head";
-import "@/styles/globals.css";
+
 
 const poppins = Poppins({ weight: ["300", "400"], subsets: ["latin"] });
 
