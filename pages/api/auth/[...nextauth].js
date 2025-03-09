@@ -19,8 +19,11 @@ export const authOptions = {
     callbacks: {
         async session({ session, token, user }) {
             await mongooseConnect();
-            session.isAdmin = await isAdminEmail(session?.user?.email);
-            return session; // ✅ Always return a valid object
+            if (await isAdminEmail(session?.user?.email)) {
+                return session;
+            } else {
+                return null; // Return null instead of false to prevent auth issues
+            }
         }
     }
 }
