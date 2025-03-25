@@ -3,6 +3,9 @@ import path from 'path';
 
 const nextConfig = {
   reactStrictMode: true,
+  images: {
+    domains: ["lh3.googleusercontent.com"], // <— Whitelist Google's image domain
+  },
   env: {
     AWS_ACCESS_KEY_ID: process.env.AWS_ACCESS_KEY_ID,
     AWS_SECRET_ACCESS_KEY: process.env.AWS_SECRET_ACCESS_KEY,
