@@ -3,6 +3,7 @@ import axios from "axios";
 import swal from "sweetalert";
 import Layout from "@/components/Layout";
 import { QuickLinks } from "@/models/QuickLinks";
+import {mongooseConnect} from "@/lib/mongoose";
 
 export default function QuickLinksEditPage({ initialLinks }) {
   const [aboutDescription, setAboutDescription] = useState(initialLinks.about?.description || "");
@@ -20,9 +21,9 @@ export default function QuickLinksEditPage({ initialLinks }) {
     };
     try {
       await axios.put("/api/quicklinks", updatedData);
-      swal("Success", "Quick Links updated successfully.", "success");
+      await swal("Success", "Quick Links updated successfully.", "success");
     } catch (error) {
-      swal("Error", "Failed to update quick links.", "error");
+      await swal("Error", "Failed to update quick links.", "error");
     }
   }
 
@@ -70,11 +71,15 @@ export default function QuickLinksEditPage({ initialLinks }) {
   );
 }
 
+
 export async function getServerSideProps() {
-  let links = await QuickLinks.findOne({});
+  await mongooseConnect(); // Ensure DB connection before queries
+
+  let links = await QuickLinks.findOne().lean();
   if (!links) {
     links = await QuickLinks.create({});
   }
   const initialLinks = JSON.parse(JSON.stringify(links));
+
   return { props: { initialLinks } };
 }

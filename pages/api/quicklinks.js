@@ -1,35 +1,38 @@
-import {QuickLinks} from "@/models/QuickLinks";
+import { QuickLinks } from "@/models/QuickLinks";
+import {mongooseConnect} from "@/lib/mongoose";
 
 export default async function handler(req, res) {
-  
+  await mongooseConnect(); // Establish DB connection using mongooseConnect
 
   if (req.method === 'GET') {
     try {
-      // Retrieve the QuickLinks document; if it doesn't exist, create one with defaults.
-      let links = await QuickLinks.findOne({});
+      let links = await QuickLinks.findOne().lean(); // Use lean() for faster reads
       if (!links) {
         links = await QuickLinks.create({});
       }
-      res.status(200).json(links);
+      return res.status(200).json(links);
     } catch (error) {
-      console.error('Error fetching quicklinks:', error);
-      res.status(500).json({ error: 'Failed to load quicklinks' });
+      console.error("Error fetching quicklinks:", error);
+      return res.status(500).json({ error: "Failed to load quicklinks" });
     }
-  } else if (req.method === 'PUT') {
+  }
+
+  else if (req.method === 'PUT') {
     try {
-      // Update the quicklinks document with the new data provided in req.body.
-      // Consider adding authentication safeguards here.
-      const updatedLinks = await QuickLinks.findOneAndUpdate({}, req.body, {
-        new: true,
-        upsert: true // Creates the document if not already present
-      });
-      res.status(200).json(updatedLinks);
+      const updatedLinks = await QuickLinks.findOneAndUpdate(
+          {},
+          { $set: req.body },
+          { new: true, upsert: true }
+      ).lean();
+      return res.status(200).json(updatedLinks);
     } catch (error) {
-      console.error('Error updating quicklinks:', error);
-      res.status(500).json({ error: 'Unable to update quicklinks' });
+      console.error("Error updating quicklinks:", error);
+      return res.status(500).json({ error: "Unable to update quicklinks" });
     }
-  } else {
-    res.setHeader('Allow', ['GET', 'PUT']);
-    res.status(405).end(`Method ${req.method} Not Allowed`);
+  }
+
+  else {
+    res.setHeader("Allow", ["GET", "PUT"]);
+    return res.status(405).end(`Method ${req.method} Not Allowed`);
   }
 }
