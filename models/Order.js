@@ -1,7 +1,16 @@
 import  {model, models, Schema} from "mongoose";
 
 const OrderSchema = new Schema({
-    line_items: Object,
+    line_items: [
+        {
+            price_data: {
+                product_data: {
+                    name: String,
+                },
+            },
+            quantity: Number,
+        },
+    ],
     name: String,
     email: String,
     city: String,
