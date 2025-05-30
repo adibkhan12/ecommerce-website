@@ -72,6 +72,25 @@ export default function OrdersPage() {
                                     )}
                                 </span>
                             </div>
+                            <div className="flex items-center justify-between mb-2">
+                                <span className="text-xs text-gray-400">Number:</span>
+                                <span className="text-sm">{order.number || <span className="text-gray-300">N/A</span>}</span>
+                            </div>
+                            <div className="flex items-center justify-between mb-2">
+                                <span className="text-xs text-gray-400">Total Price:</span>
+                                <span className="text-sm">
+                                    {Array.isArray(order.line_items) && order.line_items.length > 0
+                                        ? `${(
+                                            order.line_items.reduce((sum, item) => {
+                                                const unit = item?.price_data?.unit_amount || 0;
+                                                const qty = item?.quantity || 0;
+                                                return sum + unit * qty;
+                                            }, 0) / 100
+                                        ).toLocaleString(undefined, { minimumFractionDigits: 2 })} AED`
+                                        : <span className="text-gray-300">N/A</span>
+                                    }
+                                </span>
+                            </div>
                             <div className="mb-2">
                                 <span className="text-xs text-gray-400">Recipient:</span>
                                 <div className="ml-2 text-sm">

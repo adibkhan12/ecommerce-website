@@ -18,7 +18,8 @@ const OrderSchema = new Schema({
     addressLine1: String,
     addressLine2: String,
     country: String,
-    paid:Boolean,
+    paid: Boolean,
+    price: Number,
 },  {
     timestamps: true,
 });
