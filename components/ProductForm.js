@@ -10,6 +10,7 @@ export default function ProductForm({
     title: existingTitle,
     description: existingDescription,
     price: existingPrice,
+    stock: existingStock,
     images: existingImages,
     category: assignedCategory,
     properties: assignedProperties,
@@ -19,6 +20,7 @@ export default function ProductForm({
     const [category, setCategory] = useState(assignedCategory || '');
     const [productProperties, setProductProperties] = useState(assignedProperties || {});
     const [price, setPrice] = useState(existingPrice || '');
+    const [stock, setStock] = useState(existingStock || 0);
     const [images, setImages] = useState(existingImages || []);
     const [isUploading, setIsUploading] = useState(false);
     const [categories, setCategories] = useState([]);
@@ -32,7 +34,7 @@ export default function ProductForm({
     async function saveProduct(ev) {
         ev.preventDefault();
         const data = {
-            title, description, price, images, category,
+            title, description, price, stock, images, category,
             properties: productProperties
         };
         if (_id) {
@@ -203,6 +205,20 @@ export default function ProductForm({
                     onChange={ev => setPrice(ev.target.value)}
                     className="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400"
                 />
+            </div>
+            <div>
+                <label className="block font-semibold mb-1">Stock</label>
+                <div className="flex items-center gap-2">
+                    <button type="button" onClick={() => setStock(Math.max(0, stock - 1))} className="px-3 py-1 bg-gray-200 rounded text-lg">-</button>
+                    <input
+                        type="number"
+                        min="0"
+                        value={stock}
+                        onChange={ev => setStock(Number(ev.target.value))}
+                        className="w-24 border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400 text-center"
+                    />
+                    <button type="button" onClick={() => setStock(stock + 1)} className="px-3 py-1 bg-gray-200 rounded text-lg">+</button>
+                </div>
             </div>
             <div className="pt-4">
                 <button

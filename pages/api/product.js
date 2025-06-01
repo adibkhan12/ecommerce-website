@@ -21,12 +21,13 @@ export default async function handle(req, res) {
     }
 
     if (req.method === 'POST') {
-        const {title, description, price, images,category,properties} = req.body;
+        const {title, description, price, images, category, properties, stock} = req.body;
         console.log('Received data:', req.body); // Debug log to confirm received data
         const productDoc = await Product.create({
             title,
             description,
             price,
+            stock,
             images,
             category,
             properties
@@ -36,7 +37,7 @@ export default async function handle(req, res) {
 
     if (method === 'PUT') {
         try {
-            const { title, description, price, _id, category, images, properties } = req.body;
+            const { title, description, price, _id, category, images, properties, stock } = req.body;
 
             if (!_id) {
                 return res.status(400).json({ error: 'Missing product ID' });
@@ -44,7 +45,7 @@ export default async function handle(req, res) {
 
             const result = await Product.updateOne(
                 { _id },
-                { title, description, price, images, category, properties }
+                { title, description, price, stock, images, category, properties }
             );
 
             if (result.matchedCount === 0) {
