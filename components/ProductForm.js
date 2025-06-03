@@ -154,12 +154,13 @@ export default function ProductForm({
                                     key={link}
                                     className="relative h-24 w-24 bg-white p-2 shadow-sm rounded border border-gray-200 flex items-center justify-center"
                                 >
-                                    <Image
+                                    <img
                                         src={link}
-                                        alt=""
+                                        alt="Product"
                                         width={90}
                                         height={90}
                                         className="rounded object-cover h-full w-full"
+                                        style={{ display: 'block' }}
                                     />
                                     <button
                                         type="button"
