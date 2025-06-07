@@ -20,6 +20,7 @@ const OrderSchema = new Schema({
     country: String,
     paid: Boolean,
     price: Number,
+    status: { type: String, default: 'Placed' },
 },  {
     timestamps: true,
 });

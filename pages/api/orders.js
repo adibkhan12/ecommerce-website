@@ -2,13 +2,6 @@ import { mongooseConnect } from "@/lib/mongoose";
 import { Order } from "@/models/Order";
 import nodemailer from "nodemailer";
 
-console.log('SMTP CONFIG:', {
-    host: process.env.SMTP_HOST,
-    port: process.env.SMTP_PORT,
-    user: process.env.SMTP_USER,
-    from: process.env.SMTP_FROM
-});
-
 let transporter;
 try {
     transporter = nodemailer.createTransport({
@@ -71,13 +64,22 @@ export default async function handler(req, res) {
             res.status(500).json({ error: 'Order creation or email failed', details: error.message });
         }
     } else if (method === "PUT") {
-        const { orderId, paid } = req.body;
+        const { orderId, paid, status } = req.body;
 
         if (!orderId) {
             return res.status(400).json({ error: "orderId is required" });
         }
 
-        const updatedOrder = await Order.findByIdAndUpdate(orderId, { paid }, { new: true }).lean();
+        // Build update object dynamically
+        const updateFields = {};
+        if (typeof paid !== 'undefined') updateFields.paid = paid;
+        if (typeof status !== 'undefined') updateFields.status = status;
+
+        if (Object.keys(updateFields).length === 0) {
+            return res.status(400).json({ error: "No fields to update" });
+        }
+
+        const updatedOrder = await Order.findByIdAndUpdate(orderId, updateFields, { new: true }).lean();
         res.json(updatedOrder);
     } else {
         res.status(405).end(`Method ${method} Not Allowed`);

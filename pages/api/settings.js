@@ -4,12 +4,15 @@ import { Setting } from "@/models/Setting";
 
 export default async function handler(req, res) {
     await mongooseConnect();
-    await isAdminRequest(req, res);
 
     if (req.method === "GET") {
         const { name } = req.query;
         if (!name) {
             return res.status(400).json({ error: "Missing 'name' in the query parameters" });
+        }
+        // Allow public GET for adBanners, require admin for others
+        if (name !== "adBanners") {
+            await isAdminRequest(req, res);
         }
         const setting = await Setting.findOne({ name });
         if (!setting) {
