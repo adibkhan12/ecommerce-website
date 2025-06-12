@@ -199,6 +199,15 @@ export default function OrdersPage() {
                                               </span>
                                           )}
                                 </span>
+                                
+                            </div>
+                                <div className="flex items-center justify-between mb-2">
+                                <span className="text-xs text-gray-400">
+                                    Referred by:
+                                </span>
+                                <span className="text-sm">
+                                    {order.referralSource || <span className="text-gray-300">N/A</span>}
+                                </span>
                             </div>
                             <div className="mb-2">
                                 <span className="text-xs text-gray-400">
@@ -220,6 +229,7 @@ export default function OrdersPage() {
                                     </div>
                                     <div>{order.country}</div>
                                 </div>
+                                
                             </div>
                             <div>
                                 <span className="text-xs text-gray-400">
@@ -251,7 +261,6 @@ export default function OrdersPage() {
                                 </div>
                             </div>
 
-                            {/* Insert the OrderStatusUpdater here */}
                             <OrderStatusUpdater order={order} />
                         </div>
                     ))}

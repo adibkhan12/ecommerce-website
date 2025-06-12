@@ -21,14 +21,15 @@ export default async function handle(req, res) {
     }
 
     if (req.method === 'POST') {
-        const {title, description, price, images, category, properties, stock} = req.body;
-        console.log('Received data:', req.body); // Debug log to confirm received data
+        const {title, description, price, images, colorVariants, category, properties, stock} = req.body;
+        // If colorVariants exist and are non-empty, ignore images
         const productDoc = await Product.create({
             title,
             description,
             price,
             stock,
-            images,
+            images: (!colorVariants || colorVariants.length === 0) ? images : [],
+            colorVariants: colorVariants || [],
             category,
             properties
         })
@@ -37,7 +38,7 @@ export default async function handle(req, res) {
 
     if (method === 'PUT') {
         try {
-            const { title, description, price, _id, category, images, properties, stock } = req.body;
+            const { title, description, price, _id, category, images, colorVariants, properties, stock } = req.body;
 
             if (!_id) {
                 return res.status(400).json({ error: 'Missing product ID' });
@@ -45,7 +46,16 @@ export default async function handle(req, res) {
 
             const result = await Product.updateOne(
                 { _id },
-                { title, description, price, stock, images, category, properties }
+                {
+                  title,
+                  description,
+                  price,
+                  stock,
+                  images: (!colorVariants || colorVariants.length === 0) ? images : [],
+                  colorVariants: colorVariants || [],
+                  category,
+                  properties
+                }
             );
 
             if (result.matchedCount === 0) {
