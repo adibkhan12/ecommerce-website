@@ -1,4 +1,5 @@
 import mongoose, {model, Schema, models} from 'mongoose';
+import { Color } from './Color';
 
 const ProductSchema = new Schema({
     title: {type: String, required: true},

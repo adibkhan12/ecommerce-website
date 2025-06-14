@@ -1,5 +1,5 @@
 import { mongooseConnect } from '../../lib/mongoose';
-import Color from '../../models/Color';
+import { Color } from '../../models/Color';
 
 export default async function handler(req, res) {
   await mongooseConnect();

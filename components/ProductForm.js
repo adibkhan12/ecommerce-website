@@ -302,15 +302,17 @@ export default function ProductForm({
         <label className="block font-semibold mb-1">Colors</label>
         <div className="flex flex-wrap gap-2 mb-2">
           {colorVariants.map((cv) => {
-            const colorObj = colors.find((c) => c._id === cv.color);
+            // cv.color can be an object (populated) or an id string
+            const colorId = typeof cv.color === 'object' && cv.color !== null ? cv.color._id : cv.color;
+            const colorName = typeof cv.color === 'object' && cv.color !== null ? cv.color.name : (colors.find(c => c._id === cv.color)?.name || cv.color);
             return (
-              <div key={cv.color} className="relative inline-block">
+              <div key={colorId} className="relative inline-block">
                 <button
                   type="button"
-                  onClick={() => setOpenColorId(openColorId === cv.color ? null : cv.color)}
-                  className={`px-3 py-1 rounded border ${openColorId === cv.color ? "bg-blue-500 text-white" : "bg-gray-100"}`}
+                  onClick={() => setOpenColorId(openColorId === colorId ? null : colorId)}
+                  className={`px-3 py-1 rounded border ${openColorId === colorId ? "bg-blue-500 text-white" : "bg-gray-100"}`}
                 >
-                  {colorObj ? colorObj.name : cv.color}
+                  {colorName}
                 </button>
                 <span
                   onClick={(e) => {
@@ -345,16 +347,28 @@ export default function ProductForm({
       {colorVariants.length > 0 && openColorId && (
         <div className="mb-6">
           <label className="block font-semibold mb-2">Images for {(() => {
+            // openColorId may be an id or an object
+            const cv = colorVariants.find((cv) => {
+              if (typeof cv.color === 'object' && cv.color !== null) return cv.color._id === openColorId;
+              return cv.color === openColorId;
+            });
+            if (cv && typeof cv.color === 'object' && cv.color !== null) return cv.color.name;
             const colorObj = colors.find((c) => c._id === openColorId);
             return colorObj ? colorObj.name : openColorId;
           })()}</label>
           <div className="flex flex-wrap gap-2 mb-2">
-            {colorVariants.find((cv) => cv.color === openColorId)?.images.map((link) => (
-              <div key={link} className="relative h-20 w-20 bg-white p-1 shadow-sm rounded border flex items-center justify-center">
-                <img src={link} alt="Color Variant" className="rounded object-cover h-full w-full" />
-                <button type="button" onClick={() => removeImageFromColor(openColorId, link)} className="absolute top-0 right-0 bg-red-500 text-white text-xs rounded-full px-1 py-0.5">X</button>
-              </div>
-            ))}
+            {(() => {
+              const cv = colorVariants.find((cv) => {
+                if (typeof cv.color === 'object' && cv.color !== null) return cv.color._id === openColorId;
+                return cv.color === openColorId;
+              });
+              return cv?.images.map((link) => (
+                <div key={link} className="relative h-20 w-20 bg-white p-1 shadow-sm rounded border flex items-center justify-center">
+                  <img src={link} alt="Color Variant" className="rounded object-cover h-full w-full" />
+                  <button type="button" onClick={() => removeImageFromColor(openColorId, link)} className="absolute top-0 right-0 bg-red-500 text-white text-xs rounded-full px-1 py-0.5">X</button>
+                </div>
+              ));
+            })()}
           </div>
           <div className="flex gap-2 items-center mb-2">
             <label className="w-20 h-20 flex flex-col items-center justify-center text-primary rounded bg-white shadow-sm cursor-pointer border border-primary">
