@@ -20,6 +20,11 @@ export default function ProductForm({
   const [category, setCategory] = useState(assignedCategory || "");
   const [productProperties, setProductProperties] = useState(assignedProperties || {});
   const [price, setPrice] = useState(existingPrice || "");
+
+  // Helper to update product properties
+  function setProductProp(propName, value) {
+    setProductProperties((prev) => ({ ...prev, [propName]: value }));
+  }
   const [stock, setStock] = useState(existingStock || 0);
   const [images, setImages] = useState([]); // All images, regardless of color
   const [colorVariants, setColorVariants] = useState([]); // [{ color, images: [] }]
